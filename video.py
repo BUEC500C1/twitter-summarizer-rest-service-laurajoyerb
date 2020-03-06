@@ -124,7 +124,7 @@ def get_tweets():
         globals.processes[str(ident)]["status"] = "processing"
 
         if no_keys:
-            default_tweets = open("allTweets.obj", "rb")
+            default_tweets = open("allTweets.txt", "rb")
             raw_tweets = default_tweets.read()
             allTweets = pickle.loads(raw_tweets)
             day_tweets = dated_tweets(allTweets)
