@@ -2,3 +2,5 @@
 .DS_Store
 keys
 keys.py
+*.png
+*.mp4

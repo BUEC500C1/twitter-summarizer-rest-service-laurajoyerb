@@ -11,12 +11,36 @@ from video import send_completed_video
 from video import get_tweets
 from video import clean_all, clean_old
 
+configured = False
+
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
+
+def configure_app():
+    globals.init()
+    clean_all()
+
+    globals.q.join()
+
+    # creates and starts threads
+    threads = []
+
+    for i in range(globals.max_threads):
+        worker = threading.Thread(target=get_tweets)
+        worker.setDaemon(True)
+        threads.append(worker)
+
+    for t in threads:
+        t.start()
+    
+    configured = True
 
 
 @app.route('/', methods=['GET'])
 def home():
+    if not configured:
+        configure_app()
+
     return """
         <h1>Twitter Video Project</h1>
         <p>by Laura Joy Erb</p>
@@ -26,11 +50,17 @@ def home():
 
 @app.route('/progress', methods=['GET'])
 def progress():
+    if not configured:
+        configure_app()
+
     return render_template('progress.html', calls=globals.processes)
 
 
 @app.route('/tweets/', methods=['GET'])
 def twitter_username():
+    if not configured:
+        configure_app()
+
     # used to periodically clean out unnecessary files
     # cleaning will increase in frequency as calls become more frequent
     clean_old()
