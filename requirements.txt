@@ -1,6 +1,6 @@
 ffmpeg==1.4
 flake8==3.7.9
-Flask==1.1.1
+Flask==2.3.2
 geojson==2.5.0
 image==1.5.28
 jsonify==0.5
